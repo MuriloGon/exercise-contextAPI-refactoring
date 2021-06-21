@@ -2,11 +2,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { changeSignal } from './redux/actionCreators';
 import redSignal from './images/redSignal.jpeg';
 import yellowSignal from './images/yellowSignal.jpeg';
 import greenSignal from './images/greenSignal.jpeg';
+import Context from './context/Context';
 
 const renderSignal = (signalColor) => {
   if (signalColor === 'red') return redSignal;
@@ -15,7 +15,11 @@ const renderSignal = (signalColor) => {
   return null;
 };
 
-const TrafficSignal = ({ signalColor, changeSignal }) => {
+// const TrafficSignal = ({ signalColor, changeSignal }) => {
+class TrafficSignal extends React.Component {
+  render() {
+  const { signal: { color: signalColor }, changeSignal } = this.context;
+  console.log(this.context)
   return (
     <div>
       <div className="button-container">
@@ -31,8 +35,12 @@ const TrafficSignal = ({ signalColor, changeSignal }) => {
       </div>
       <img className="signal" src={renderSignal(signalColor)} alt="" />
     </div>
-  );
+    );
+  }
+
 };
+
+TrafficSignal.contextType = Context;
 
 const mapStateToProps = (state) => ({
   signalColor: state.trafficReducer.signal.color
@@ -45,4 +53,4 @@ TrafficSignal.propTypes = {
   signalColor: PropTypes.string.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TrafficSignal);
+export default TrafficSignal;
